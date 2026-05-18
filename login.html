@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Login Halsindo</title>
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <style>
+
+    body {
+
+      height: 100vh;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      background: #004d4d;
+
+      font-family: Arial;
+
+    }
+
+    .login-box {
+
+      width: 350px;
+
+      background: white;
+
+      padding: 30px;
+
+      border-radius: 15px;
+
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+
+    }
+
+    .logo {
+
+      width: 100%;
+
+      height: 180px;
+
+      object-fit: cover;
+
+      border-radius: 10px;
+
+      margin-bottom: 20px;
+
+    }
+
+    .btn-login {
+
+      width: 100%;
+
+      background: #f5c542;
+
+      border: none;
+
+      font-weight: bold;
+
+    }
+
+    .btn-login:hover {
+
+      background: #ddb12d;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+  <img
+  src="Halsindo.jpg"
+  class="logo">
+
+  <h2 class="text-center mb-4">
+
+    LOGIN HALSINDO
+
+  </h2>
+
+  <!-- EMAIL -->
+  <input
+  type="email"
+  id="email"
+  class="form-control mb-3"
+  placeholder="Masukkan Email">
+
+  <!-- PASSWORD -->
+  <input
+  type="password"
+  id="password"
+  class="form-control mb-3"
+  placeholder="Masukkan Password">
+
+  <!-- BUTTON LOGIN -->
+  <button
+  id="login"
+  class="btn btn-login">
+
+  Login
+
+  </button>
+
+  <p class="text-center mt-3 text-muted">
+
+    “Awali Hari dengan Tepat Waktu dan Semangat”
+
+  </p>
+
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword
+}
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+
+// FIREBASE CONFIG
+const firebaseConfig = {
+
+  apiKey: "AIzaSyBH9fdaDioSIBohv04Nwn5UsB-Wh8Q8AaU",
+
+  authDomain: "latihan2-ba4c5.firebaseapp.com",
+
+  projectId: "latihan2-ba4c5",
+
+  storageBucket: "latihan2-ba4c5.firebasestorage.app",
+
+  messagingSenderId: "515994512533",
+
+  appId: "1:515994512533:web:7bdd166157ac92f398ff9c"
+
+};
+
+// FIREBASE
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+// LOGIN
+document.getElementById("login")
+
+.addEventListener("click", () => {
+
+  const email = document.getElementById("email").value;
+
+  const password = document.getElementById("password").value;
+
+  signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  )
+
+  .then(() => {
+
+    alert("Login berhasil");
+
+    window.location.href = "index.html";
+
+  })
+
+  .catch((error) => {
+
+    alert(error.message);
+
+    console.log(error);
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>
