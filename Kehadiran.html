@@ -6,8 +6,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Kehadiran PT Nozomi</title>
+  <title>Kehadiran PT Halsindo</title>
 
+  <!-- BOOTSTRAP -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
     rel="stylesheet">
@@ -19,7 +20,7 @@
 <!-- JUDUL -->
 <h2 class="text-center p-3">
 
-  Form Kehadiran PT Nozomi Otomotif Indonesia
+  Form Kehadiran PT Halsindo
 
 </h2>
 
@@ -29,6 +30,7 @@
   <!-- FOTO -->
   <img
   src="Halsindo.jpg"
+  alt="Foto"
   class="img-fluid rounded w-100 mb-4"
   style="height:300px; object-fit:cover;">
 
@@ -148,7 +150,7 @@
 
   </table>
 
-  <!-- SIMPAN -->
+  <!-- BUTTON -->
   <button
   id="simpan"
   class="btn btn-primary">
@@ -160,7 +162,7 @@
   <hr>
 
   <!-- DATA -->
-  <ul id="daftar"></ul>
+  <div id="daftar"></div>
 
 </div>
 
@@ -169,42 +171,53 @@
 
 function ambilLokasi() {
 
-  if (navigator.geolocation) {
-
-    navigator.geolocation.getCurrentPosition(
-
-      function(posisi) {
-
-        let latitude = posisi.coords.latitude;
-
-        let longitude = posisi.coords.longitude;
-
-        // LINK GOOGLE MAPS
-        let maps =
-
-        "https://www.google.com/maps?q="
-        + latitude + "," + longitude;
-
-        // tampilkan ke input
-        document.getElementById("lokasi").value = maps;
-
-        alert("Lokasi berhasil diambil");
-
-      },
-
-      function(error) {
-
-        alert("Lokasi gagal diambil");
-
-      }
-
-    );
-
-  } else {
+  // cek browser support GPS
+  if (!navigator.geolocation) {
 
     alert("Browser tidak mendukung GPS");
+    return;
 
   }
+
+  // ambil lokasi
+  navigator.geolocation.getCurrentPosition(
+
+    // sukses
+    function(posisi) {
+
+      const latitude =
+      posisi.coords.latitude;
+
+      const longitude =
+      posisi.coords.longitude;
+
+      // buat link maps
+      const maps =
+
+      "https://www.google.com/maps?q="
+      + latitude + "," + longitude;
+
+      // tampil ke input
+      document.getElementById(
+      "lokasi").value = maps;
+
+      alert(
+      "Lokasi berhasil diambil");
+
+    },
+
+    // gagal
+    function(error) {
+
+      alert(
+      "Lokasi gagal diambil\n\n"
+      + error.message);
+
+      console.log(error);
+
+    }
+
+  );
 
 }
 
@@ -217,74 +230,122 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 
 import {
+
   getDatabase,
   ref,
   push,
   onValue,
   remove
+
 }
+
 from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
+// FIREBASE CONFIG
 const app = initializeApp({
 
-  apiKey: "AIzaSyBH9fdaDioSIBohv04Nwn5UsB-Wh8Q8AaU",
+  apiKey:
+  "AIzaSyBH9fdaDioSIBohv04Nwn5UsB-Wh8Q8AaU",
 
-  authDomain: "latihan2-ba4c5.firebaseapp.com",
+  authDomain:
+  "latihan2-ba4c5.firebaseapp.com",
 
-  projectId: "latihan2-ba4c5",
+  projectId:
+  "latihan2-ba4c5",
 
-  storageBucket: "latihan2-ba4c5.firebasestorage.app",
+  storageBucket:
+  "latihan2-ba4c5.firebasestorage.app",
 
-  messagingSenderId: "515994512533",
+  messagingSenderId:
+  "515994512533",
 
-  appId: "1:515994512533:web:7bdd166157ac92f398ff9c"
+  appId:
+  "1:515994512533:web:7bdd166157ac92f398ff9c"
 
 });
 
+// DATABASE
 const db = getDatabase(app);
 
-const tanggal = document.getElementById("tanggal");
-const nama = document.getElementById("nama");
-const status = document.getElementById("status");
-const overtime = document.getElementById("overtime");
-const lokasi = document.getElementById("lokasi");
+// ELEMEN
+const tanggal =
+document.getElementById("tanggal");
 
-const simpan = document.getElementById("simpan");
+const nama =
+document.getElementById("nama");
 
-const daftar = document.getElementById("daftar");
+const status =
+document.getElementById("status");
 
-const dataRef = ref(db, "Kehadiran");
+const overtime =
+document.getElementById("overtime");
+
+const lokasi =
+document.getElementById("lokasi");
+
+const simpan =
+document.getElementById("simpan");
+
+const daftar =
+document.getElementById("daftar");
+
+// REF DATABASE
+const dataRef =
+ref(db, "Kehadiran");
 
 // SIMPAN
 simpan.onclick = () => {
 
+  // validasi
   if (
+
     !tanggal.value ||
     !nama.value ||
     !lokasi.value
+
   ) {
 
-    alert("Lengkapi data");
+    alert(
+    "Lengkapi data terlebih dahulu");
 
     return;
+
   }
 
+  // simpan firebase
   push(dataRef, {
 
-    tanggal: tanggal.value,
-    nama: nama.value,
-    status: status.value,
-    overtime: overtime.value,
-    lokasi: lokasi.value
+    tanggal:
+    tanggal.value,
+
+    nama:
+    nama.value,
+
+    status:
+    status.value,
+
+    overtime:
+    overtime.value,
+
+    lokasi:
+    lokasi.value
 
   });
 
-  alert("Kehadiran berhasil disimpan");
+  alert(
+  "Kehadiran berhasil disimpan");
 
+  // reset
   tanggal.value = "";
+
   nama.value = "";
-  status.value = "Hadir";
-  overtime.value = "Tidak";
+
+  status.value =
+  "Hadir";
+
+  overtime.value =
+  "Tidak";
+
   lokasi.value = "";
 
 };
@@ -294,55 +355,113 @@ onValue(dataRef, (snap) => {
 
   daftar.innerHTML = "";
 
+  // grup tanggal
+  let grupTanggal = {};
+
   snap.forEach((item) => {
 
     const data = item.val();
 
     const key = item.key;
 
+    // buat grup
+    if (!grupTanggal[data.tanggal]) {
+
+      grupTanggal[data.tanggal] = [];
+
+    }
+
+    // push data
+    grupTanggal[data.tanggal].push({
+
+      key: key,
+      nama: data.nama,
+      status: data.status,
+      overtime: data.overtime,
+      lokasi: data.lokasi
+
+    });
+
+  });
+
+  // tampil per tanggal
+  for (let tanggal in grupTanggal) {
+
     daftar.innerHTML += `
 
-    <li style="
-    margin-bottom:20px;
-    background:white;
-    padding:15px;
-    border-radius:10px;
-    list-style:none;
-    box-shadow:0 0 5px rgba(0,0,0,0.2);
+    <div style="
+      background:white;
+      padding:15px;
+      margin-bottom:20px;
+      border-radius:10px;
+      box-shadow:0 0 5px rgba(0,0,0,0.2);
     ">
 
-    <b>Tanggal :</b> ${data.tanggal}<br>
+    <h4>
 
-    <b>Nama :</b> ${data.nama}<br>
+      📅 ${tanggal}
 
-    <b>Status :</b> ${data.status}<br>
-
-    <b>Overtime :</b> ${data.overtime}<br>
-
-    <b>Lokasi :</b>
-
-    <a href="${data.lokasi}"
-    target="_blank">
-
-    Lihat Maps
-
-    </a>
-
-    <br><br>
-
-    <button
-    onclick="hapusData('${key}')"
-    class="btn btn-danger btn-sm">
-
-    Hapus
-
-    </button>
-
-    </li>
+    </h4>
 
     `;
 
-  });
+    // tampil data
+    grupTanggal[tanggal].forEach((item, index) => {
+
+      daftar.innerHTML += `
+
+      <div style="
+        padding:10px;
+        border-bottom:1px solid #ddd;
+        margin-bottom:10px;
+      ">
+
+      <b>
+
+      ${index + 1}.
+      ${item.nama}
+
+      </b>
+
+      <br>
+
+      Status :
+      ${item.status}
+
+      <br>
+
+      Overtime :
+      ${item.overtime}
+
+      <br>
+
+      <a
+      href="${item.lokasi}"
+      target="_blank">
+
+      📍 Lihat Lokasi
+
+      </a>
+
+      <br><br>
+
+      <button
+      onclick="hapusData('${item.key}')"
+      class="btn btn-danger btn-sm">
+
+      Hapus
+
+      </button>
+
+      </div>
+
+      `;
+
+    });
+
+    daftar.innerHTML += `</div>`;
+
+  }
 
 });
 
@@ -350,12 +469,13 @@ onValue(dataRef, (snap) => {
 window.hapusData = function(key) {
 
   let yakin = confirm(
-    "Yakin mau hapus data ini?"
-  );
+  "Yakin mau hapus data ini?");
 
   if (yakin) {
 
-    remove(ref(db, "Kehadiran/" + key));
+    remove(
+    ref(db, "Kehadiran/" + key)
+    );
 
   }
 
