@@ -172,9 +172,10 @@ id="sidebar">
 
   <div class="px-3">
 
-    <img src="Halsindo.jpg"
-alt="Foto Dashboard"
-class="dashboard-img">
+    <img
+    src="Halsindo.jpg"
+    class="img-fluid rounded w-100"
+    style="height:400px; object-fit:cover;">
 
   </div>
 
@@ -202,20 +203,21 @@ setInterval(() => {
 <!-- MENU -->
 <script>
 
-const menu_btn =
-document.querySelector("#menu-btn");
+var menu_btn = document.querySelector("#menu-btn");
 
-const sidebar =
-document.querySelector("#sidebar");
+var sidebar = document.querySelector("#sidebar");
+
+var container = document.querySelector("#container");
 
 menu_btn.addEventListener("click", () => {
 
-sidebar.classList.toggle("active-nav");
+  sidebar.classList.toggle("active-nav");
+
+  container.classList.toggle("active-cont");
 
 });
 
 </script>
-  
 
 <!-- FIREBASE -->
 <script type="module">
