@@ -1,81 +1,107 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-body {
-  min-height: 100vh;
-  background-color: #fff;
+body{
+    min-height:100vh;
+    background:#f1f1f1;
+    overflow-x:hidden;
 }
 
-.side-navbar {
-  width: 185px;
-  height: 100%;
-  position: fixed;
-  margin-left: -300px;
-  background-color: #4157fa;
-  transition: 0.5s;
+/* SIDEBAR */
+.side-navbar{
+    width:220px;
+    height:100vh;
+    position:fixed;
+    top:0;
+    left:-220px;
+    background:#4157fa;
+    transition:0.3s;
+    z-index:1000;
+    overflow-y:auto;
 }
 
-.nav-link:active,
-.nav-link:focus,
-.nav-link:hover {
-  background-color: #ffffff26;
+/* SIDEBAR AKTIF */
+.side-navbar.active-nav{
+    left:0;
 }
 
-.my-container {
-  transition: 0.4s;
+/* CONTAINER */
+.my-container{
+    width:100%;
+    min-height:100vh;
+    transition:0.3s;
+    padding:10px;
 }
 
-.active-nav {
-  margin-left: 0;
+/* LAPTOP */
+@media(min-width:769px){
+
+    .side-navbar{
+        left:0;
+    }
+
+    .my-container{
+        margin-left:220px;
+        width:calc(100% - 220px);
+    }
+
 }
 
-/* for main section */
-.active-cont {
-  margin-left: 180px;
+/* MENU BUTTON */
+#menu-btn{
+    background:#100901;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
 }
 
-#menu-btn {
-  background-color: #100901;
-  color: #fff;
-  margin-left: -62px;
+/* NAVBAR */
+.top-navbar{
+    width:100%;
+    background:white;
+    padding:15px;
+    border-radius:10px;
 }
 
-.my-container input {
-  border-radius: 2rem;
-  padding: 2px 20px;
+/* LINK */
+.nav-link{
+    color:white;
 }
 
-.content-wrapper {
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  min-height: 80vh;
+.nav-link:hover{
+    background:#ffffff26;
 }
 
-/* contoh jika nanti ada form */
-.content-wrapper form {
-  max-width: 800px;
-}
-
-.input-persegi {
-  border-radius: 0;
-}
 /* FOTO DASHBOARD */
 .dashboard-img{
     width:100%;
-    height:400px;
+    height:350px;
     object-fit:cover;
     border-radius:10px;
 }
 
-/* TAMPILAN HP */
+/* CONTENT */
+.content-wrapper{
+    padding:20px;
+    background:white;
+    border-radius:10px;
+    min-height:80vh;
+}
+
+/* FORM */
+.input-persegi{
+    border-radius:0;
+}
+
+/* HP */
 @media(max-width:768px){
 
     .dashboard-img{
-        height:220px;
+        height:200px;
     }
 
     h3{
@@ -85,51 +111,5 @@ body {
     .top-navbar p{
         font-size:18px;
     }
-
-}
-/* HP */
-@media (max-width: 768px){
-
-  body{
-    overflow-x:hidden;
-  }
-
-  .side-navbar{
-    width:220px;
-    position:fixed;
-    height:100%;
-    z-index:1000;
-    margin-left:-220px;
-    transition:0.3s;
-  }
-
-  .active-nav{
-    margin-left:0;
-  }
-
-  .my-container{
-    margin-left:0 !important;
-    width:100% !important;
-    padding:10px;
-  }
-
-  .active-cont{
-    margin-left:0 !important;
-  }
-
-  .top-navbar{
-    width:100%;
-    padding:10px;
-  }
-
-  .dashboard-img{
-    width:100%;
-    height:200px;
-    object-fit:cover;
-  }
-
-  h3{
-    font-size:26px;
-  }
 
 }
