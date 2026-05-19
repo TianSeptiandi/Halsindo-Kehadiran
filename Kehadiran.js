@@ -2,254 +2,475 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 
 import {
-  getDatabase,
-  ref,
-  push,
-  onValue,
-  remove,
-  update
+getDatabase,
+ref,
+push,
+onValue,
+remove,
+update
 }
 from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
 // FIREBASE
 const app = initializeApp({
 
-  apiKey: "AIzaSyBH9fdaDioSIBohv04Nwn5UsB-Wh8Q8AaU",
+apiKey: "AIzaSyBH9fdaDioSIBohv04Nwn5UsB-Wh8Q8AaU",
 
-  authDomain: "latihan2-ba4c5.firebaseapp.com",
+authDomain: "latihan2-ba4c5.firebaseapp.com",
 
-  projectId: "latihan2-ba4c5",
+databaseURL:
+"https://latihan2-ba4c5-default-rtdb.firebaseio.com",
 
-  storageBucket: "latihan2-ba4c5.firebasestorage.app",
+projectId: "latihan2-ba4c5",
 
-  messagingSenderId: "515994512533",
+storageBucket:
+"latihan2-ba4c5.firebasestorage.app",
 
-  appId: "1:515994512533:web:7bdd166157ac92f398ff9c"
+messagingSenderId:
+"515994512533",
+
+appId:
+"1:515994512533:web:7bdd166157ac92f398ff9c"
 
 });
 
 const db = getDatabase(app);
 
 // ELEMEN
-const inputTanggal = document.getElementById("tanggal");
+const tanggal =
+document.getElementById("tanggal");
 
-const inputNama = document.getElementById("nama");
+const jam =
+document.getElementById("jam");
 
-const inputStatus = document.getElementById("status");
+const nama =
+document.getElementById("nama");
 
-const inputLembur = document.getElementById("lembur");
+const status =
+document.getElementById("status");
 
-const simpan = document.getElementById("simpan");
+const lembur =
+document.getElementById("lembur");
 
-const daftar = document.getElementById("daftar");
+const foto =
+document.getElementById("foto");
 
-const modeText = document.getElementById("mode");
+const lokasi =
+document.getElementById("lokasi");
 
-const dataref = ref(db, "Kehadiran");
+const simpan =
+document.getElementById("simpan");
+
+const daftar =
+document.getElementById("daftar");
+
+const mode =
+document.getElementById("mode");
+
+const dataRef =
+ref(db, "Kehadiran");
 
 let editKey = null;
 
-// SIMPAN
-simpan.onclick = () => {
+// ====================
+// JAM HIDUP
+// ====================
 
-  if (
-    !inputTanggal.value ||
-    !inputNama.value
-  ) {
+function updateJam() {
 
-    alert("Data harus diisi!");
+const sekarang = new Date();
 
-    return;
+let jamNow =
+String(sekarang.getHours())
+.padStart(2, "0");
 
-  }
+let menitNow =
+String(sekarang.getMinutes())
+.padStart(2, "0");
 
-  // TAMBAH
-  if (editKey == null) {
+let detikNow =
+String(sekarang.getSeconds())
+.padStart(2, "0");
 
-    push(dataref, {
-
-      tanggal: inputTanggal.value,
-
-      nama: inputNama.value,
-
-      status: inputStatus.value,
-
-      lembur: inputLembur.value
-
-    });
-
-  }
-
-  // UPDATE
-  else {
-
-    update(ref(db, "Kehadiran/" + editKey), {
-
-      tanggal: inputTanggal.value,
-
-      nama: inputNama.value,
-
-      status: inputStatus.value,
-
-      lembur: inputLembur.value
-
-    });
-
-    editKey = null;
-
-    simpan.innerText = "Simpan";
-
-    modeText.innerText = "";
-
-  }
-
-  // RESET
-  inputTanggal.value = "";
-
-  inputNama.value = "";
-
-  inputStatus.value = "Hadir";
-
-  inputLembur.value = "Tidak";
-
-};
-
-// TAMPIL DATA
-onValue(dataref, snap => {
-
-  daftar.innerHTML = "";
-
-  let grupTanggal = {};
-
-  snap.forEach(h => {
-
-    const data = h.val();
-
-    const key = h.key;
-
-    if (!grupTanggal[data.tanggal]) {
-
-      grupTanggal[data.tanggal] = [];
-
-    }
-
-    grupTanggal[data.tanggal].push({
-
-      key: key,
-
-      nama: data.nama,
-
-      status: data.status,
-
-      lembur: data.lembur
-
-    });
-
-  });
-
-  // TAMPIL
-  for (let tanggal in grupTanggal) {
-
-    daftar.innerHTML += `
-
-      <h4 class="mt-4">
-
-        Tanggal : ${tanggal}
-
-      </h4>
-
-    `;
-
-    grupTanggal[tanggal].forEach(item => {
-
-      daftar.innerHTML += `
-
-      <li class="mb-3">
-
-        <b>Nama :</b> ${item.nama}
-
-        &nbsp;&nbsp;&nbsp;
-
-        <b>Status :</b> ${item.status}
-
-        &nbsp;&nbsp;&nbsp;
-
-        <b>Lembur :</b> ${item.lembur}
-
-        <br><br>
-
-        <button
-        class="btn btn-danger btn-sm"
-        onclick="hapusData('${item.key}')">
-
-        Hapus
-
-        </button>
-
-        <button
-        class="btn btn-warning btn-sm"
-        onclick="editData(
-          '${item.key}',
-          '${tanggal}',
-          '${item.nama}',
-          '${item.status}',
-          '${item.lembur}'
-        )">
-
-        Edit
-
-        </button>
-
-      </li>
-
-      `;
-
-    });
-
-  }
-
-});
-
-// HAPUS
-window.hapusData = function(key) {
-
-  let yakin = confirm("Yakin mau dihapus?");
-
-  if (yakin) {
-
-    remove(ref(db, "Kehadiran/" + key))
-
-    .then(() => {
-
-      alert("Data berhasil dihapus");
-
-    });
-
-  }
+jam.value =
+jamNow + ":" +
+menitNow + ":" +
+detikNow;
 
 }
 
-// EDIT
-window.editData = function(
-  key,
-  tanggal,
-  nama,
-  status,
-  lembur
+setInterval(updateJam, 1000);
+
+updateJam();
+
+// ====================
+// AMBIL LOKASI
+// ====================
+
+window.ambilLokasi = function() {
+
+if (!navigator.geolocation) {
+
+alert("GPS tidak didukung");
+
+return;
+
+}
+
+navigator.geolocation.getCurrentPosition(
+
+(posisi) => {
+
+const lat =
+posisi.coords.latitude;
+
+const long =
+posisi.coords.longitude;
+
+lokasi.value =
+"https://www.google.com/maps?q="
++ lat + "," + long;
+
+alert("Lokasi berhasil diambil");
+
+},
+
+(error) => {
+
+alert("Gagal mengambil lokasi");
+
+}
+
+);
+
+}
+
+// ====================
+// SIMPAN
+// ====================
+
+simpan.onclick = () => {
+
+if (
+tanggal.value == "" ||
+nama.value == ""
 ) {
 
-  inputTanggal.value = tanggal;
+alert("Lengkapi data");
 
-  inputNama.value = nama;
+return;
 
-  inputStatus.value = status;
+}
 
-  inputLembur.value = lembur;
+// FOTO ADA
+if (foto.files.length > 0) {
 
-  editKey = key;
+const file = foto.files[0];
 
-  simpan.innerText = "Update";
+const reader = new FileReader();
 
-  modeText.innerText = "Mode Edit";
+reader.onloadend = function() {
+
+simpanData(reader.result);
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+// FOTO TIDAK ADA
+else {
+
+simpanData("");
+
+}
+
+};
+
+// ====================
+// FUNCTION SIMPAN
+// ====================
+
+function simpanData(fotoBase64) {
+
+const data = {
+
+tanggal: tanggal.value,
+jam: jam.value,
+nama: nama.value,
+status: status.value,
+lembur: lembur.value,
+lokasi: lokasi.value,
+foto: fotoBase64
+
+};
+
+// TAMBAH
+if (editKey == null) {
+
+push(dataRef, data);
+
+}
+
+// UPDATE
+else {
+
+update(
+ref(db, "Kehadiran/" + editKey),
+data
+);
+
+editKey = null;
+
+mode.innerText = "";
+
+simpan.innerText =
+"Simpan Kehadiran";
+
+}
+
+alert("Data berhasil disimpan");
+
+// RESET
+tanggal.value = "";
+
+nama.value = "";
+
+status.value = "Hadir";
+
+lembur.value = "Tidak";
+
+lokasi.value = "";
+
+foto.value = "";
+
+}
+
+// ====================
+// TAMPIL DATA
+// ====================
+
+onValue(dataRef, (snapshot) => {
+
+daftar.innerHTML = "";
+
+let grup = {};
+
+// GRUPKAN TANGGAL
+snapshot.forEach((item) => {
+
+const data = item.val();
+
+const key = item.key;
+
+if (!grup[data.tanggal]) {
+
+grup[data.tanggal] = [];
+
+}
+
+grup[data.tanggal].push({
+
+key: key,
+data: data
+
+});
+
+});
+
+// TAMPILKAN
+for (let tgl in grup) {
+
+let jumlahOrang =
+grup[tgl].length;
+
+daftar.innerHTML += `
+
+<div class="mt-4">
+
+<h4
+class="
+bg-dark
+text-white
+p-2
+rounded
+d-flex
+justify-content-between
+align-items-center
+">
+
+<span>
+Tanggal : ${tgl}
+</span>
+
+<span
+class="
+badge
+bg-warning
+text-dark
+">
+
+${jumlahOrang} Orang
+
+</span>
+
+</h4>
+
+</div>
+
+`;
+
+grup[tgl].forEach((item) => {
+
+const data = item.data;
+
+daftar.innerHTML += `
+
+<div
+class="card p-2 mb-2 shadow-sm w-100"
+style="
+font-size:14px;
+">
+
+<b>${data.nama}</b>
+
+<br>
+
+Jam :
+${data.jam}
+
+<br>
+
+Status :
+${data.status}
+
+<br>
+
+Lembur :
+${data.lembur}
+
+<br><br>
+
+${
+data.foto
+?
+`
+<img
+src="${data.foto}"
+style="
+width:180px;
+height:180px;
+object-fit:cover;
+border-radius:10px;
+border:2px solid #ccc;
+margin-bottom:10px;
+">
+`
+:
+``
+}
+
+<br>
+
+${
+data.lokasi
+?
+`
+<a
+href="${data.lokasi}"
+target="_blank"
+class="btn btn-success btn-sm">
+
+Lihat Maps
+
+</a>
+`
+:
+``
+}
+
+<button
+onclick="editData(
+'${item.key}',
+'${data.tanggal}',
+'${data.nama}',
+'${data.status}',
+'${data.lembur}',
+'${data.lokasi}'
+)"
+class="btn btn-warning btn-sm ms-1">
+
+Edit
+
+</button>
+
+<button
+onclick="hapusData('${item.key}')"
+class="btn btn-danger btn-sm ms-1">
+
+Hapus
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+});
+
+// ====================
+// HAPUS
+// ====================
+
+window.hapusData = function(key) {
+
+let yakin =
+confirm("Yakin mau hapus data?");
+
+if (yakin) {
+
+remove(
+ref(db, "Kehadiran/" + key)
+);
+
+}
+
+}
+
+// ====================
+// EDIT
+// ====================
+
+window.editData = function(
+key,
+tgl,
+nm,
+sts,
+lbr,
+lok
+) {
+
+tanggal.value = tgl;
+
+nama.value = nm;
+
+status.value = sts;
+
+lembur.value = lbr;
+
+lokasi.value = lok;
+
+editKey = key;
+
+mode.innerText =
+"Mode Edit";
+
+simpan.innerText =
+"Update Kehadiran";
 
 }
