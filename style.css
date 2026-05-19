@@ -4,10 +4,12 @@
     box-sizing:border-box;
 }
 
+html,
 body{
-    min-height:100vh;
-    background:#f1f1f1;
+    width:100%;
     overflow-x:hidden;
+    background:#f1f1f1;
+    font-family:Arial, sans-serif;
 }
 
 /* SIDEBAR */
@@ -17,10 +19,11 @@ body{
     position:fixed;
     top:0;
     left:-220px;
-    background:#4157fa;
+    background:#004d4d;
     transition:0.3s;
-    z-index:1000;
+    z-index:999;
     overflow-y:auto;
+    padding-top:10px;
 }
 
 /* SIDEBAR AKTIF */
@@ -32,8 +35,8 @@ body{
 .my-container{
     width:100%;
     min-height:100vh;
-    transition:0.3s;
     padding:10px;
+    overflow-x:hidden;
 }
 
 /* LAPTOP */
@@ -50,51 +53,46 @@ body{
 
 }
 
-/* MENU BUTTON */
-#menu-btn{
-    background:#100901;
-    color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:8px;
-}
-
 /* NAVBAR */
 .top-navbar{
     width:100%;
     background:white;
-    padding:15px;
     border-radius:10px;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+/* MENU BUTTON */
+#menu-btn{
+    background:#111;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    font-size:20px;
 }
 
 /* LINK */
 .nav-link{
-    color:white;
+    color:white !important;
+    padding:12px;
+    display:block;
+    text-decoration:none;
 }
 
 .nav-link:hover{
-    background:#ffffff26;
+    background:#ffffff22;
 }
 
-/* FOTO DASHBOARD */
+/* FOTO */
 .dashboard-img{
     width:100%;
     height:350px;
     object-fit:cover;
     border-radius:10px;
-}
-
-/* CONTENT */
-.content-wrapper{
-    padding:20px;
-    background:white;
-    border-radius:10px;
-    min-height:80vh;
-}
-
-/* FORM */
-.input-persegi{
-    border-radius:0;
 }
 
 /* HP */
@@ -108,52 +106,22 @@ body{
         font-size:28px;
     }
 
+    .top-navbar{
+        padding:10px;
+    }
+
     .top-navbar p{
         font-size:18px;
     }
 
 }
-html, body{
-    width:100%;
-    overflow-x:hidden !important;
-}
 
-/* supaya semua element tidak melebihi layar */
+/* PENTING */
 img,
+div,
 table,
 input,
-select,
 button,
-div{
+select{
     max-width:100%;
-}
-
-/* container utama */
-.my-container{
-    overflow-x:hidden;
-}
-
-/* sidebar hp */
-@media(max-width:768px){
-
-    .side-navbar{
-        width:220px;
-        left:-220px;
-    }
-
-    .side-navbar.active-nav{
-        left:0;
-    }
-
-    .my-container{
-        margin-left:0 !important;
-        width:100% !important;
-    }
-
-    /* penting */
-    body{
-        position:relative;
-        overflow-x:hidden !important;
-    }
-
 }
