@@ -4,14 +4,15 @@
 <head>
 
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+  content="width=device-width, initial-scale=1.0">
 
-  <title>Kehadiran PT Halsindo</title>
+  <title>Absensi PT Halsindo</title>
 
   <!-- BOOTSTRAP -->
   <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
-    rel="stylesheet">
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+  rel="stylesheet">
 
 </head>
 
@@ -20,7 +21,8 @@
 <!-- JUDUL -->
 <h2 class="text-center p-3">
 
-  Form Kehadiran PT Halsindo
+  Sistem Kehadiran
+  PT Halsindo
 
 </h2>
 
@@ -30,9 +32,8 @@
   <!-- FOTO -->
   <img
   src="Halsindo.jpg"
-  alt="Foto"
-  class="img-fluid rounded w-900 mb-4"
-  style="height:200px; object-fit:cover;">
+  class="img-fluid rounded w-100 mb-4"
+  style="height:300px; object-fit:cover;">
 
   <!-- FORM -->
   <table class="table">
@@ -40,7 +41,9 @@
     <!-- TANGGAL -->
     <tr>
 
-      <td><b>Tanggal</b></td>
+      <td width="200">
+        <b>Tanggal</b>
+      </td>
 
       <td>
 
@@ -53,14 +56,37 @@
 
     </tr>
 
-    <!-- NAMA -->
+    <!-- JAM -->
     <tr>
 
-      <td><b>Nama</b></td>
+      <td>
+        <b>Jam</b>
+      </td>
 
       <td>
 
-        <select id="nama" class="form-control">
+        <input
+        type="text"
+        id="jam"
+        class="form-control"
+        readonly>
+
+      </td>
+
+    </tr>
+
+    <!-- NAMA -->
+    <tr>
+
+      <td>
+        <b>Nama</b>
+      </td>
+
+      <td>
+
+        <select
+        id="nama"
+        class="form-control">
 
           <option value="">
             Pilih Nama Karyawan
@@ -87,11 +113,15 @@
     <!-- STATUS -->
     <tr>
 
-      <td><b>Status</b></td>
+      <td>
+        <b>Status</b>
+      </td>
 
       <td>
 
-        <select id="status" class="form-control">
+        <select
+        id="status"
+        class="form-control">
 
           <option>Hadir</option>
           <option>Izin</option>
@@ -107,11 +137,15 @@
     <!-- OVERTIME -->
     <tr>
 
-      <td><b>Overtime</b></td>
+      <td>
+        <b>Overtime</b>
+      </td>
 
       <td>
 
-        <select id="overtime" class="form-control">
+        <select
+        id="overtime"
+        class="form-control">
 
           <option>Tidak</option>
           <option>Ya</option>
@@ -122,10 +156,32 @@
 
     </tr>
 
+    <!-- SELFIE -->
+    <tr>
+
+      <td>
+        <b>Selfie Realtime</b>
+      </td>
+
+      <td>
+
+        <input
+        type="file"
+        id="foto"
+        accept="image/*"
+        capture="user"
+        class="form-control">
+
+      </td>
+
+    </tr>
+
     <!-- LOKASI -->
     <tr>
 
-      <td><b>Lokasi GPS</b></td>
+      <td>
+        <b>Lokasi GPS</b>
+      </td>
 
       <td>
 
@@ -159,6 +215,11 @@
 
   </button>
 
+  <p
+  id="mode"
+  class="text-danger mt-2">
+  </p>
+
   <hr>
 
   <!-- DATA -->
@@ -166,23 +227,56 @@
 
 </div>
 
+<!-- SCRIPT JAM -->
+<script>
+
+setInterval(() => {
+
+  let now = new Date();
+
+  let jam =
+
+  now.getHours()
+  .toString()
+  .padStart(2,"0")
+
+  + ":" +
+
+  now.getMinutes()
+  .toString()
+  .padStart(2,"0")
+
+  + ":" +
+
+  now.getSeconds()
+  .toString()
+  .padStart(2,"0");
+
+  document
+  .getElementById("jam")
+  .value = jam;
+
+}, 1000);
+
+</script>
+
 <!-- SCRIPT GPS -->
 <script>
 
 function ambilLokasi() {
 
-  // cek browser support GPS
   if (!navigator.geolocation) {
 
-    alert("Browser tidak mendukung GPS");
+    alert(
+    "Browser tidak mendukung GPS"
+    );
+
     return;
 
   }
 
-  // ambil lokasi
   navigator.geolocation.getCurrentPosition(
 
-    // sukses
     function(posisi) {
 
       const latitude =
@@ -191,29 +285,27 @@ function ambilLokasi() {
       const longitude =
       posisi.coords.longitude;
 
-      // buat link maps
       const maps =
 
       "https://www.google.com/maps?q="
       + latitude + "," + longitude;
 
-      // tampil ke input
-      document.getElementById(
-      "lokasi").value = maps;
+      document
+      .getElementById("lokasi")
+      .value = maps;
 
       alert(
-      "Lokasi berhasil diambil");
+      "Lokasi berhasil diambil"
+      );
 
     },
 
-    // gagal
     function(error) {
 
       alert(
       "Lokasi gagal diambil\n\n"
-      + error.message);
-
-      console.log(error);
+      + error.message
+      );
 
     }
 
@@ -227,49 +319,71 @@ function ambilLokasi() {
 <script type="module">
 
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+
+from
+"https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 
 import {
 
-  getDatabase,
-  ref,
-  push,
-  onValue,
-  remove
+getDatabase,
+ref,
+push,
+onValue,
+remove,
+update
 
 }
 
-from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+from
+"https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+
+import {
+
+getStorage,
+ref as storageRef,
+uploadBytes,
+getDownloadURL
+
+}
+
+from
+"https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
 // FIREBASE CONFIG
 const app = initializeApp({
 
-  apiKey:
-  "AIzaSyBH9fdaDioSIBohv04Nwn5UsB-Wh8Q8AaU",
+apiKey:
+"AIzaSyBH9fdaDioSIBohv04Nwn5UsB-Wh8Q8AaU",
 
-  authDomain:
-  "latihan2-ba4c5.firebaseapp.com",
+authDomain:
+"latihan2-ba4c5.firebaseapp.com",
 
-  projectId:
-  "latihan2-ba4c5",
+projectId:
+"latihan2-ba4c5",
 
-  storageBucket:
-  "latihan2-ba4c5.firebasestorage.app",
+storageBucket:
+"latihan2-ba4c5.firebasestorage.app",
 
-  messagingSenderId:
-  "515994512533",
+messagingSenderId:
+"515994512533",
 
-  appId:
-  "1:515994512533:web:7bdd166157ac92f398ff9c"
+appId:
+"1:515994512533:web:7bdd166157ac92f398ff9c"
 
 });
 
-// DATABASE
-const db = getDatabase(app);
+const db =
+getDatabase(app);
+
+const storage =
+getStorage(app);
 
 // ELEMEN
 const tanggal =
 document.getElementById("tanggal");
+
+const jam =
+document.getElementById("jam");
 
 const nama =
 document.getElementById("nama");
@@ -283,59 +397,150 @@ document.getElementById("overtime");
 const lokasi =
 document.getElementById("lokasi");
 
+const foto =
+document.getElementById("foto");
+
 const simpan =
 document.getElementById("simpan");
 
 const daftar =
 document.getElementById("daftar");
 
-// REF DATABASE
+const mode =
+document.getElementById("mode");
+
 const dataRef =
 ref(db, "Kehadiran");
 
-// SIMPAN
-simpan.onclick = () => {
+// MODE EDIT
+let editKey = null;
 
-  // validasi
+// SIMPAN
+simpan.onclick = async () => {
+
   if (
 
     !tanggal.value ||
     !nama.value ||
-    !lokasi.value
+    !lokasi.value ||
+    !foto.files[0]
 
   ) {
 
     alert(
-    "Lengkapi data terlebih dahulu");
+    "Lengkapi semua data"
+    );
 
     return;
 
   }
 
-  // simpan firebase
-  push(dataRef, {
+  // upload selfie
+  let file = foto.files[0];
 
-    tanggal:
-    tanggal.value,
+  let simpanFoto =
 
-    nama:
-    nama.value,
+  storageRef(
+  storage,
+  "selfie/" + Date.now()
+  );
 
-    status:
-    status.value,
+  await uploadBytes(
+  simpanFoto,
+  file
+  );
 
-    overtime:
-    overtime.value,
+  let fotoURL =
 
-    lokasi:
-    lokasi.value
+  await getDownloadURL(
+  simpanFoto
+  );
 
-  });
+  // TAMBAH DATA
+  if (editKey == null) {
 
-  alert(
-  "Kehadiran berhasil disimpan");
+    push(dataRef, {
 
-  // reset
+      tanggal:
+      tanggal.value,
+
+      jam:
+      jam.value,
+
+      nama:
+      nama.value,
+
+      status:
+      status.value,
+
+      overtime:
+      overtime.value,
+
+      lokasi:
+      lokasi.value,
+
+      foto:
+      fotoURL
+
+    });
+
+    alert(
+    "Kehadiran berhasil disimpan"
+    );
+
+  }
+
+  // UPDATE DATA
+  else {
+
+    update(
+
+      ref(
+      db,
+      "Kehadiran/" + editKey
+      ),
+
+      {
+
+      tanggal:
+      tanggal.value,
+
+      jam:
+      jam.value,
+
+      nama:
+      nama.value,
+
+      status:
+      status.value,
+
+      overtime:
+      overtime.value,
+
+      lokasi:
+      lokasi.value,
+
+      foto:
+      fotoURL
+
+      }
+
+    );
+
+    alert(
+    "Data berhasil diupdate"
+    );
+
+    editKey = null;
+
+    mode.innerHTML = "";
+
+    simpan.innerHTML =
+    "Simpan Kehadiran";
+
+  }
+
+  // RESET
   tanggal.value = "";
 
   nama.value = "";
@@ -348,6 +553,8 @@ simpan.onclick = () => {
 
   lokasi.value = "";
 
+  foto.value = "";
+
 };
 
 // TAMPIL DATA
@@ -355,65 +562,74 @@ onValue(dataRef, (snap) => {
 
   daftar.innerHTML = "";
 
-  // grup tanggal
   let grupTanggal = {};
 
   snap.forEach((item) => {
 
-    const data = item.val();
+    let data = item.val();
 
-    const key = item.key;
+    let key = item.key;
 
-    // buat grup
     if (!grupTanggal[data.tanggal]) {
 
-      grupTanggal[data.tanggal] = [];
+      grupTanggal[data.tanggal]
+      = [];
 
     }
 
-    // push data
-    grupTanggal[data.tanggal].push({
+    grupTanggal[data.tanggal]
+    .push({
 
-      key: key,
-      nama: data.nama,
-      status: data.status,
-      overtime: data.overtime,
-      lokasi: data.lokasi
+      key:key,
+
+      tanggal:data.tanggal,
+
+      jam:data.jam,
+
+      nama:data.nama,
+
+      status:data.status,
+
+      overtime:data.overtime,
+
+      lokasi:data.lokasi,
+
+      foto:data.foto
 
     });
 
   });
 
-  // tampil per tanggal
+  // tampil
   for (let tanggal in grupTanggal) {
 
     daftar.innerHTML += `
 
     <div style="
-      background:white;
-      padding:15px;
-      margin-bottom:20px;
-      border-radius:10px;
-      box-shadow:0 0 5px rgba(0,0,0,0.2);
+    background:white;
+    padding:15px;
+    margin-bottom:20px;
+    border-radius:10px;
+    box-shadow:0 0 5px rgba(0,0,0,0.2);
     ">
 
     <h4>
 
-      📅 ${tanggal}
+    📅 ${tanggal}
 
     </h4>
 
     `;
 
-    // tampil data
-    grupTanggal[tanggal].forEach((item, index) => {
+    grupTanggal[tanggal]
+    .forEach((item,index) => {
 
       daftar.innerHTML += `
 
       <div style="
-        padding:10px;
-        border-bottom:1px solid #ddd;
-        margin-bottom:10px;
+      border-bottom:1px solid #ddd;
+      padding:10px;
+      margin-bottom:10px;
       ">
 
       <b>
@@ -425,15 +641,20 @@ onValue(dataRef, (snap) => {
 
       <br>
 
-      Status :
+      🕒 Jam :
+      ${item.jam}
+
+      <br>
+
+      📌 Status :
       ${item.status}
 
       <br>
 
-      Overtime :
+      ⏰ Overtime :
       ${item.overtime}
 
-      <br>
+      <br><br>
 
       <a
       href="${item.lokasi}"
@@ -445,8 +666,32 @@ onValue(dataRef, (snap) => {
 
       <br><br>
 
+      <img
+      src="${item.foto}"
+      width="120"
+      class="rounded">
+
+      <br><br>
+
       <button
-      onclick="hapusData('${item.key}')"
+      onclick="editData(
+      '${item.key}',
+      '${item.tanggal}',
+      '${item.nama}',
+      '${item.status}',
+      '${item.overtime}',
+      '${item.lokasi}'
+      )"
+      class="btn btn-warning btn-sm">
+
+      Update
+
+      </button>
+
+      <button
+      onclick="hapusData(
+      '${item.key}'
+      )"
       class="btn btn-danger btn-sm">
 
       Hapus
@@ -466,18 +711,59 @@ onValue(dataRef, (snap) => {
 });
 
 // HAPUS
-window.hapusData = function(key) {
+window.hapusData =
+function(key) {
 
   let yakin = confirm(
-  "Yakin mau hapus data ini?");
+  "Yakin mau hapus data?"
+  );
 
   if (yakin) {
 
     remove(
-    ref(db, "Kehadiran/" + key)
+    ref(db,
+    "Kehadiran/" + key)
     );
 
   }
+
+}
+
+// EDIT
+window.editData =
+function(
+
+key,
+tanggalData,
+namaData,
+statusData,
+overtimeData,
+lokasiData
+
+) {
+
+  tanggal.value =
+  tanggalData;
+
+  nama.value =
+  namaData;
+
+  status.value =
+  statusData;
+
+  overtime.value =
+  overtimeData;
+
+  lokasi.value =
+  lokasiData;
+
+  editKey = key;
+
+  mode.innerHTML =
+  "Mode Update";
+
+  simpan.innerHTML =
+  "Update Data";
 
 }
 
