@@ -113,3 +113,47 @@ body{
     }
 
 }
+html, body{
+    width:100%;
+    overflow-x:hidden !important;
+}
+
+/* supaya semua element tidak melebihi layar */
+img,
+table,
+input,
+select,
+button,
+div{
+    max-width:100%;
+}
+
+/* container utama */
+.my-container{
+    overflow-x:hidden;
+}
+
+/* sidebar hp */
+@media(max-width:768px){
+
+    .side-navbar{
+        width:220px;
+        left:-220px;
+    }
+
+    .side-navbar.active-nav{
+        left:0;
+    }
+
+    .my-container{
+        margin-left:0 !important;
+        width:100% !important;
+    }
+
+    /* penting */
+    body{
+        position:relative;
+        overflow-x:hidden !important;
+    }
+
+}
