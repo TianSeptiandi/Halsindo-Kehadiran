@@ -1,127 +1,65 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html,
-body{
-    width:100%;
-    overflow-x:hidden;
-    background:#f1f1f1;
-    font-family:Arial, sans-serif;
+body {
+  min-height: 100vh;
+  color: #f4c542;  
 }
 
-/* SIDEBAR */
-.side-navbar{
-    width:220px;
-    height:100vh;
-    position:fixed;
-    top:0;
-    left:-220px;
-    background:#004d4d;
-    transition:0.3s;
-    z-index:999;
-    overflow-y:auto;
-    padding-top:10px;
+.side-navbar {
+  width: 185px;
+  height: 100%;
+  position: fixed;
+  margin-left: -300px;
+  background: #004d4d;
+  transition: 0.5s;
 }
 
-/* SIDEBAR AKTIF */
-.side-navbar.active-nav{
-    left:0;
+.nav-link:active,
+.nav-link:focus,
+.nav-link:hover {
+  background-color: #ffffff26;
 }
 
-/* CONTAINER */
-.my-container{
-    width:100%;
-    min-height:100vh;
-    padding:10px;
-    overflow-x:hidden;
+.my-container {
+  transition: 0.4s;
 }
 
-/* LAPTOP */
-@media(min-width:769px){
-
-    .side-navbar{
-        left:0;
-    }
-
-    .my-container{
-        margin-left:220px;
-        width:calc(100% - 220px);
-    }
-
+.active-nav {
+  margin-left: 0;
 }
 
-/* NAVBAR */
-.top-navbar{
-    width:100%;
-    background:white;
-    border-radius:10px;
-    padding:15px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:20px;
+/* for main section */
+.active-cont {
+  margin-left: 180px;
 }
 
-/* MENU BUTTON */
-#menu-btn{
-    background:#111;
-    color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:8px;
-    font-size:20px;
+#menu-btn {
+  background-color: #100901;
+  color: #fff;
+  margin-left: -62px;
 }
 
-/* LINK */
-.nav-link{
-    color:white !important;
-    padding:12px;
-    display:block;
-    text-decoration:none;
+.my-container input {
+  border-radius: 2rem;
+  padding: 2px 20px;
 }
 
-.nav-link:hover{
-    background:#ffffff22;
+.content-wrapper {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  min-height: 80vh;
 }
 
-/* FOTO */
-.dashboard-img{
-    width:100%;
-    height:350px;
-    object-fit:cover;
-    border-radius:10px;
+/* contoh jika nanti ada form */
+.content-wrapper form {
+  max-width: 800px;
 }
 
-/* HP */
-@media(max-width:768px){
-
-    .dashboard-img{
-        height:200px;
-    }
-
-    h3{
-        font-size:28px;
-    }
-
-    .top-navbar{
-        padding:10px;
-    }
-
-    .top-navbar p{
-        font-size:18px;
-    }
-
-}
-
-/* PENTING */
-img,
-div,
-table,
-input,
-button,
-select{
-    max-width:100%;
+.input-persegi {
+  border-radius: 0;
 }
