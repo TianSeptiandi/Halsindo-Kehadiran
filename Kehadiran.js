@@ -31,7 +31,6 @@ messagingSenderId:
 
 appId:
 "1:515994512533:web:7bdd166157ac92f398ff9c"
-
 });
 
 const db = getDatabase(app);
