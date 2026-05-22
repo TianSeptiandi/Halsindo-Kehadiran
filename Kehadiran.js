@@ -31,6 +31,7 @@ messagingSenderId:
 
 appId:
 "1:515994512533:web:7bdd166157ac92f398ff9c"
+
 });
 
 const db = getDatabase(app);
@@ -71,44 +72,34 @@ ref(db, "Kehadiran");
 
 let editKey = null;
 
-// ====================
+// =======================
 // JAM HIDUP
-// ====================
+// =======================
 
-function updateJam() {
+function updateJam(){
 
-const sekarang = new Date();
-
-let jamNow =
-String(sekarang.getHours())
-.padStart(2, "0");
-
-let menitNow =
-String(sekarang.getMinutes())
-.padStart(2, "0");
-
-let detikNow =
-String(sekarang.getSeconds())
-.padStart(2, "0");
+const now = new Date();
 
 jam.value =
-jamNow + ":" +
-menitNow + ":" +
-detikNow;
+String(now.getHours()).padStart(2,"0")
++ ":" +
+String(now.getMinutes()).padStart(2,"0")
++ ":" +
+String(now.getSeconds()).padStart(2,"0");
 
 }
 
-setInterval(updateJam, 1000);
+setInterval(updateJam,1000);
 
 updateJam();
 
-// ====================
+// =======================
 // AMBIL LOKASI
-// ====================
+// =======================
 
-window.ambilLokasi = function() {
+window.ambilLokasi = function(){
 
-if (!navigator.geolocation) {
+if(!navigator.geolocation){
 
 alert("GPS tidak didukung");
 
@@ -118,25 +109,23 @@ return;
 
 navigator.geolocation.getCurrentPosition(
 
-(posisi) => {
+(pos)=>{
 
-const lat =
-posisi.coords.latitude;
+const lat = pos.coords.latitude;
 
-const long =
-posisi.coords.longitude;
+const long = pos.coords.longitude;
 
 lokasi.value =
 "https://www.google.com/maps?q="
 + lat + "," + long;
 
-alert("Lokasi berhasil diambil");
+alert("Lokasi berhasil");
 
 },
 
-(error) => {
+(err)=>{
 
-alert("Gagal mengambil lokasi");
+alert("Lokasi gagal diambil");
 
 }
 
@@ -144,16 +133,16 @@ alert("Gagal mengambil lokasi");
 
 }
 
-// ====================
-// SIMPAN
-// ====================
+// =======================
+// SIMPAN DATA
+// =======================
 
 simpan.onclick = () => {
 
-if (
+if(
 tanggal.value == "" ||
 nama.value == ""
-) {
+){
 
 alert("Lengkapi data");
 
@@ -162,61 +151,62 @@ return;
 }
 
 // FOTO ADA
-if (foto.files.length > 0) {
-
-const file = foto.files[0];
+if(foto.files.length > 0){
 
 const reader = new FileReader();
 
-reader.onloadend = function() {
+reader.onload = function(e){
 
-simpanData(reader.result);
+simpanData(e.target.result);
 
-};
+}
 
-reader.readAsDataURL(file);
+reader.readAsDataURL(
+foto.files[0]
+);
 
 }
 
 // FOTO TIDAK ADA
-else {
+else{
 
 simpanData("");
 
 }
 
-};
+}
 
-// ====================
+// =======================
 // FUNCTION SIMPAN
-// ====================
+// =======================
 
-function simpanData(fotoBase64) {
+function simpanData(fotoBase64){
 
 const data = {
 
-tanggal: tanggal.value,
-jam: jam.value,
-nama: nama.value,
-status: status.value,
-lembur: lembur.value,
-lokasi: lokasi.value,
-foto: fotoBase64
+tanggal : tanggal.value,
+jam : jam.value,
+nama : nama.value,
+status : status.value,
+lembur : lembur.value,
+lokasi : lokasi.value,
+foto : fotoBase64
 
 };
 
 // TAMBAH
-if (editKey == null) {
+if(editKey == null){
 
-push(dataRef, data);
+push(dataRef,data);
 
 }
 
 // UPDATE
-else {
+else{
 
 update(
-ref(db, "Kehadiran/" + editKey),
+ref(db,
+"Kehadiran/" + editKey),
 data
 );
 
@@ -232,8 +222,6 @@ simpan.innerText =
 alert("Data berhasil disimpan");
 
 // RESET
-tanggal.value = "";
-
 nama.value = "";
 
 status.value = "Hadir";
@@ -246,24 +234,24 @@ foto.value = "";
 
 }
 
-// ====================
+// =======================
 // TAMPIL DATA
-// ====================
+// =======================
 
-onValue(dataRef, (snapshot) => {
+onValue(dataRef,(snapshot)=>{
 
 daftar.innerHTML = "";
 
 let grup = {};
 
-// GRUPKAN TANGGAL
-snapshot.forEach((item) => {
+// GRUPKAN
+snapshot.forEach((item)=>{
 
 const data = item.val();
 
 const key = item.key;
 
-if (!grup[data.tanggal]) {
+if(!grup[data.tanggal]){
 
 grup[data.tanggal] = [];
 
@@ -271,85 +259,108 @@ grup[data.tanggal] = [];
 
 grup[data.tanggal].push({
 
-key: key,
-data: data
+key:key,
+data:data
 
 });
 
 });
 
-// TAMPILKAN
-for (let tgl in grup) {
+// URUTKAN
+const urut =
+Object.keys(grup).reverse();
 
-let jumlahOrang =
+urut.forEach((tgl,index)=>{
+
+let jumlah =
 grup[tgl].length;
 
 daftar.innerHTML += `
 
-<div class="mt-4">
+<div class="mt-3">
 
-<h4
-class="
-bg-dark
-text-white
-p-2
-rounded
-d-flex
-justify-content-between
-align-items-center
+<div
+onclick="toggleData('box${index}')"
+style="
+background:#1f2937;
+color:white;
+padding:12px;
+border-radius:10px;
+cursor:pointer;
+display:flex;
+justify-content:space-between;
+align-items:center;
 ">
 
-<span>
-Tanggal : ${tgl}
-</span>
+<b>📅 ${tgl}</b>
 
 <span
-class="
-badge
-bg-warning
-text-dark
+style="
+background:gold;
+color:black;
+padding:4px 10px;
+border-radius:20px;
 ">
 
-${jumlahOrang} Orang
+${jumlah} Orang
 
 </span>
 
-</h4>
+</div>
+
+<div
+id="box${index}"
+style="
+display:none;
+padding-top:10px;
+">
+
+</div>
 
 </div>
 
 `;
 
-grup[tgl].forEach((item) => {
+const isi =
+document.getElementById(
+`box${index}`
+);
+
+grup[tgl].forEach((item)=>{
 
 const data = item.data;
 
-daftar.innerHTML += `
+isi.innerHTML += `
 
 <div
-class="card p-2 mb-2 shadow-sm w-100"
+class="card p-2 mb-2 shadow-sm">
+
+<div
 style="
-font-size:14px;
+display:flex;
+justify-content:space-between;
+gap:10px;
+flex-wrap:wrap;
 ">
+
+<div>
 
 <b>${data.nama}</b>
 
 <br>
 
-Jam :
-${data.jam}
+🕒 ${data.jam}
 
 <br>
 
-Status :
-${data.status}
+📌 ${data.status}
 
 <br>
 
-Lembur :
+⏰ OT :
 ${data.lembur}
 
-<br><br>
+</div>
 
 ${
 data.foto
@@ -358,19 +369,26 @@ data.foto
 <img
 src="${data.foto}"
 style="
-width:180px;
-height:180px;
+width:90px;
+height:90px;
 object-fit:cover;
 border-radius:10px;
-border:2px solid #ccc;
-margin-bottom:10px;
 ">
 `
 :
-``
+""
 }
 
+</div>
+
 <br>
+
+<div
+style="
+display:flex;
+gap:5px;
+flex-wrap:wrap;
+">
 
 ${
 data.lokasi
@@ -381,12 +399,12 @@ href="${data.lokasi}"
 target="_blank"
 class="btn btn-success btn-sm">
 
-Lihat Maps
+Maps
 
 </a>
 `
 :
-``
+""
 }
 
 <button
@@ -398,7 +416,7 @@ onclick="editData(
 '${data.lembur}',
 '${data.lokasi}'
 )"
-class="btn btn-warning btn-sm ms-1">
+class="btn btn-warning btn-sm">
 
 Edit
 
@@ -406,7 +424,7 @@ Edit
 
 <button
 onclick="hapusData('${item.key}')"
-class="btn btn-danger btn-sm ms-1">
+class="btn btn-danger btn-sm">
 
 Hapus
 
@@ -414,36 +432,62 @@ Hapus
 
 </div>
 
+</div>
+
 `;
 
 });
 
-}
+});
 
 });
 
-// ====================
-// HAPUS
-// ====================
+// =======================
+// TOGGLE
+// =======================
 
-window.hapusData = function(key) {
+window.toggleData = function(id){
+
+const box =
+document.getElementById(id);
+
+if(box.style.display == "none"){
+
+box.style.display = "block";
+
+}
+
+else{
+
+box.style.display = "none";
+
+}
+
+}
+
+// =======================
+// HAPUS
+// =======================
+
+window.hapusData = function(key){
 
 let yakin =
-confirm("Yakin mau hapus data?");
+confirm("Hapus data?");
 
-if (yakin) {
+if(yakin){
 
 remove(
-ref(db, "Kehadiran/" + key)
+ref(db,
+"Kehadiran/" + key)
 );
 
 }
 
 }
 
-// ====================
+// =======================
 // EDIT
-// ====================
+// =======================
 
 window.editData = function(
 key,
@@ -452,7 +496,7 @@ nm,
 sts,
 lbr,
 lok
-) {
+){
 
 tanggal.value = tgl;
 
